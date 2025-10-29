@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="diavlo.css"> 
+    <title>Testeo API Rebrickable - Sets y Colores</title>
+    <style>
+        /* Estilos básicos para el ejemplo */
+        body { font-family: sans-serif; }
+        .api-container {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .set-item, .color-item {
+            border-bottom: 1px dashed #eee;
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        .set-item img {
+            width: 80px;
+            height: auto;
+            margin-right: 15px;
+            border-radius: 4px;
+        }
+        .color-swatch {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border: 1px solid #333;
+            border-radius: 50%;
+        }
+        #loader-container-sets, #loader-container-colores {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header class="shadow">
+        <div class="container-logo">
+            <img src="pochita.jpg" alt="logo">
+        </div>
+        <div>
+            <button id="dark-mode"> DARK MODE</button>
+        </div>
+    </header>
+
+    <section class="container-title">
+        <h1>Testeo Completo API Rebrickable 🧱</h1>
+        <p>Probando Set de LEGO (<code>/lego/sets/</code>) y Colores (<code>/lego/colors/</code>)</p>
+    </section>
+
+    <section class="api-container" id="container-sets"> 
+        <h2>Sets Recientes</h2>
+    </section>
+    <button id="load-more-sets">Cargar más Sets</button>
+
+    <section class="api-container" id="container-colores"> 
+        <h2>Lista de Colores</h2>
+    </section>
+    <button id="load-more-colors">Cargar más Colores</button>
+    
+    <script>
+        // 🔑 TU CLAVE API REAL GENERADA 🔑
+        const API_KEY = '1e6240a0d3dc2d161d3463cf24e830a8'; 
+        
+        // La clave se envía en el encabezado de autorización
+        const AUTH_HEADERS = {
+            'Authorization': `key ${API_KEY}`
+        };
+
+        const BASE_URL_SETS = 'https://rebrickable.com/api/v3/lego/sets/';
+        const BASE_URL_COLORS = 'https://rebrickable.com/api/v3/lego/colors/';
+
+        let nextSetUrl = BASE_URL_SETS; 
+        let nextColorUrl = BASE_URL_COLORS;
+
+        // --- Funciones de Utilidad (Loader) ---
+
+        function renderLoader(containerId){
+            const container = document.getElementById(containerId);
+            let loader = document.getElementById(`loader-${containerId}`);
+            if (!loader) {
+                loader = document.createElement('div');
+                loader.setAttribute('id', `loader-${containerId}`);
+                loader.innerHTML = 'Cargando datos LEGO... ⏳'; 
+                container.appendChild(loader);
+            }
+        }
+
+        function removeLoader(containerId){
+            const loader = document.getElementById(`loader-${containerId}`);
+            if (loader){
+                loader.remove(); 
+            }
+        }
+
+        // --- Renderizado de SETS ---
+
+        function renderSet(set) {
+            const container = document.getElementById('container-sets');
+            const setItem = document.createElement('div');
+            setItem.classList.add('set-item');
+            
+            const img = document.createElement('img');
+            img.src = set.set_img_url || ''; // Usamos || '' para evitar errores si la URL es nula
+            img.alt = set.name;
+
+            const details = document.createElement('div');
+            details.innerHTML = `<strong>${set.name}</strong> (${set.set_num})<br>Partes: ${set.num_parts}`;
+
+            setItem.appendChild(img);
+            setItem.appendChild(details);
+            container.appendChild(setItem);
+        }
+
+        // --- Renderizado de COLORES ---
+
+        function renderColor(color) {
+            const container = document.getElementById('container-colores');
+            const colorItem = document.createElement('div');
+            colorItem.classList.add('color-item');
+            
+            const swatch = document.createElement('div');
+            swatch.classList.add('color-swatch');
+            swatch.style.backgroundColor = '#' + color.rgb; 
+            
+            const details = document.createElement('span');
+            details.textContent = `${color.name} (ID: ${color.id}, Hex: #${color.rgb})`;
+
+            colorItem.appendChild(swatch);
+            colorItem.appendChild(details);
+            container.appendChild(colorItem);
+        }
+
+        // --- Función Genérica de Fetch ---
+
+        async function fetchApiData(url, containerId, renderFunction, loadMoreButtonId) {
+            if (!url) {
+                document.getElementById(loadMoreButtonId).textContent = `No hay más datos para cargar.`;
+                document.getElementById(loadMoreButtonId).disabled = true;
+                return null;
+            }
+
+            renderLoader(containerId);
+            
+            try {
+                // Petición con tu clave API real en el encabezado
+                const response = await fetch(url, { headers: AUTH_HEADERS });
+
+                if (!response.ok) {
+                    // Esto capturaría un error 401 si la clave fuera incorrecta (pero la tuya ya es real)
+                    throw new Error(`Error ${response.status}: ${response.statusText}.`);
+                }
+
+                const data = await response.json();
+                
+                data.results.forEach(renderFunction);
+
+                // Devuelve la URL de la próxima página para paginación
+                return data.next;
+
+            } catch (error) {
+                console.error(`Error al obtener los datos de ${containerId}:`, error);
+                document.getElementById(containerId).innerHTML = `<p style="color: red;">❌ ¡Error al cargar! Revisa la consola y asegúrate de usar un Servidor Web Local. (${error.message})</p>`;
+                document.getElementById(loadMoreButtonId).disabled = true;
+                return null; 
+
+            } finally {
+                removeLoader(containerId);
+            }
+        }
+
+        // --- Wrappers de Carga ---
+
+        async function get_sets() {
+            const loadMoreButtonId = 'load-more-sets';
+            nextSetUrl = await fetchApiData(
+                nextSetUrl, 
+                'container-sets', 
+                renderSet, 
+                loadMoreButtonId
+            );
+            if (!nextSetUrl) {
+                 document.getElementById(loadMoreButtonId).textContent = 'Todos los Sets cargados';
+            }
+        }
+
+        async function get_colores() {
+            const loadMoreButtonId = 'load-more-colors';
+            nextColorUrl = await fetchApiData(
+                nextColorUrl, 
+                'container-colores', 
+                renderColor, 
+                loadMoreButtonId
+            );
+            if (!nextColorUrl) {
+                document.getElementById(loadMoreButtonId).textContent = 'Todos los colores cargados';
+            }
+        }
+
+        // --- Inicialización y Eventos ---
+
+        get_sets(); 
+        get_colores();
+
+        document.getElementById("load-more-sets").addEventListener('click', get_sets); 
+        document.getElementById("load-more-colors").addEventListener('click', get_colores); 
+
+        document.getElementById("dark-mode").addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>
