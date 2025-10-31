@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Catálogo de Sets — Mi Colección LEGO</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#ffcc00;--muted:#94a3b8;--primary-btn:linear-gradient(90deg,#0ea5e9,#7c3aed);--radius:14px;font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#071025 0%, #08142a 100%);color:#e6eef8;min-height:100vh;padding-left: 70px;} /* Espacio para el sidebar */
+    /* --- SIDEBAR --- */
+    .sidebar{position:fixed;top:0;left:0;height:100%;width:70px;background:#050c18;padding:10px 0;display:flex;flex-direction:column;align-items:center;z-index:100;box-shadow:2px 0 10px rgba(0,0,0,0.5);}
+    .sidebar a{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--muted);padding:10px 0;width:100%;transition:background .2s;}
+    .sidebar a:hover{background:rgba(255,255,255,0.05);color:#fff;}
+    .sidebar a svg{width:24px;height:24px;margin-bottom:4px;}
+    .sidebar a span{font-size:10px;font-weight:600;}
+    .sidebar a.active{background:var(--primary-btn);color:#fff;}
+    /* --- HEADER --- */
+    header{display:flex;align-items:center;justify-content:space-between;padding:20px 28px}
+    .brand{display:flex;gap:14px;align-items:center}
+    .logo{width:56px;height:56px;border-radius:12px;background:var(--primary-btn);display:flex;align-items:center;justify-content:center;font-weight:800;color:#081228}
+    .title{font-size:18px;font-weight:700}
+    .subtitle{font-size:12px;color:var(--muted);margin-top:2px}
+    main{padding:18px 28px 80px}
+    /* --- CONTROLS AND GRID (mantenidos) --- */
+    .controls{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px;background: rgba(255,255,255,0.02); padding: 12px; border-radius: var(--radius);}
+    .control-group { display: flex; flex-direction: column; min-width: 100px; }
+    .control-group label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .search{flex:1;min-width:250px}
+    .search-input-group { display: flex; gap: 8px; } /* Nuevo para el botón de búsqueda */
+    input[type="search"], input[type="number"], select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:var(--card);color:inherit}
+    .btn{background:var(--accent);color:#081228;padding:10px 14px;border-radius:10px;font-weight:700;border:none;cursor:pointer}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);font-weight:600}
+    .theme-list{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    .theme-btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;border-radius:10px;color:var(--muted);cursor:pointer}
+    .theme-btn.active{background:var(--primary-btn);color:#fff;border-color:transparent}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    .imgwrap{height:170px;border-radius:12px;background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+    .product-name{font-weight:700;margin:0 0 6px}
+    .product-desc{font-size:13px;color:var(--muted);margin:0 0 10px}
+    .price-row{display:flex;align-items:center;justify-content:space-between}
+    .collection-status{font-weight:800;color:#10b981;}
+    .pager{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:14px}
+    .note{font-size:12px;color:var(--muted);margin-top:8px}
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <a href="index.html">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+        <span>Inicio</span>
+    </a>
+    <a href="catalogo.html" class="active">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 6a1 1 0 011-1h10a1 1 0 011 1v10a1 1 0 01-1 1H5a1 1 0 01-1-1V6zM5 15h10v2a1 1 0 001 1H4a1 1 0 001-1v-2z"></path></svg>
+        <span>Catálogo</span>
+    </a>
+    <a href="coleccion.html">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+        <span>Colección</span>
+    </a>
+    <a href="usuario.html">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+        <span>Usuario</span>
+    </a>
+  </div>
+
+  <header>
+    <div class="brand">
+      <div class="logo">SETS</div>
+      <div>
+        <div class="title">Catálogo de Sets LEGO</div>
+        <div class="subtitle">Encuentra sets y añádelos a tu colección.</div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="controls">
+      <div class="search control-group">
+        <label for="search">Buscar set:</label>
+        <div class="search-input-group">
+          <input type="search" id="search" placeholder="Nombre, ID Set o palabra clave..." />
+          <button class="btn" id="search-btn">Buscar</button> 
+        </div>
+      </div>
+      <div class="control-group"><label for="min_parts">Piezas (Mín.):</label><input type="number" id="min_parts" placeholder="Mín." min="0" style="width: 80px"/></div>
+      <div class="control-group"><label for="max_parts">Piezas (Máx.):</label><input type="number" id="max_parts" placeholder="Máx." min="0" style="width: 80px"/></div>
+      <div class="control-group"><label for="min_year">Año (Mín.):</label><input type="number" id="min_year" placeholder="Mín." min="1958" style="width: 80px"/></div>
+      <div class="control-group"><label for="max_year">Año (Máx.):</label><input type="number" id="max_year" placeholder="Máx." min="1958" style="width: 80px"/></div>
+      <div class="control-group">
+        <label for="sort">Ordenar por:</label>
+        <select id="sort" class="ghost" style="width: 120px;">
+          <option value="-year_released">Más recientes</option>
+          <option value="year_released">Más antiguos</option>
+          <option value="-num_parts">Más piezas</option>
+          <option value="num_parts">Menos piezas</option>
+        </select>
+      </div>
+      <button class="btn" id="reload">Aplicar Filtros</button>
+    </div>
+
+    <div class="theme-list" id="themeList"></div>
+
+    <section class="grid" id="catalog"></section>
+
+    <div class="pager" id="pager"></div>
+    <div class="note">Mostrando ${PAGE_SIZE} sets por página. (Máximo: 1000 por llamada de API)</div>
+  </main>
+
+
+  <script>
+    const API_KEY = '1e6240a0d3dc2d161d3463cf24e830a8';
+    const PAGE_SIZE = 50; 
+    const BASE = 'https://rebrickable.com/api/v3/lego';
+    const PRIORITY_THEMES = ['Star Wars','Technic','Marvel','Ninjago','City','Creator','Classic','Harry Potter','Friends'];
+
+    let themesMap = {}; 
+    let activeThemeId = null;
+    let currentPage = 1;
+    let lastSort = '-year_released'; 
+    let inventory = JSON.parse(localStorage.getItem('legoInventory')) || {}; 
+    let setsDetailsCache = {}; 
+
+    function fmt(n){return n.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+    function saveInventory(){ localStorage.setItem('legoInventory', JSON.stringify(inventory)); }
+    function escapeHtml(s){ return s ? s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) : ''; }
+
+    async function apiFetch(path){
+      const res = await fetch(BASE + path, {headers: {'Authorization': `key ${API_KEY}`}});
+      if(!res.ok){ throw new Error('API error: '+res.status); }
+      return res.json();
+    }
+    
+    // Agrega UN set a la colección
+    function addToInventory(setnum){ 
+        if(!inventory[setnum]) {
+            inventory[setnum] = { qty: 1, isFavorite: false };
+        } else {
+            inventory[setnum].qty += 1;
+        }
+        saveInventory();
+    }
+
+    // Funciones de carga de temas
+    async function loadThemes(){
+        try{
+            const data = await apiFetch('/themes/?page_size=500');
+            const themes = data.results || [];
+            themes.forEach(t=>themesMap[t.name]=t.id);
+
+            const container = document.getElementById('themeList');
+            container.innerHTML = '';
+
+            PRIORITY_THEMES.forEach(pref =>{
+              const match = themes.find(t => t.name.toLowerCase().includes(pref.toLowerCase()));
+              if(match){
+                const btn = document.createElement('button'); btn.className='theme-btn'; btn.innerText=match.name; btn.dataset.id=match.id;
+                btn.addEventListener('click',()=>{ toggleTheme(btn, match.id); });
+                container.appendChild(btn);
+              }
+            });
+
+            const more = document.createElement('select'); more.style.marginLeft='8px';
+            const optAll = document.createElement('option'); optAll.value=''; optAll.innerText='Todas las temáticas'; more.appendChild(optAll);
+            themes.slice(0,200).forEach(t=>{ const o=document.createElement('option'); o.value=t.id; o.innerText=t.name; more.appendChild(o)});
+            more.addEventListener('change',(e)=>{ if(e.target.value===''){ activeThemeId=null } else activeThemeId = e.target.value; currentPage=1; fetchAndRender(); toggleActiveThemeButton(); });
+            container.appendChild(more);
+
+        }catch(err){
+            console.error('loadThemes',err);
+            document.getElementById('themeList').innerHTML = '<div style="color:var(--muted)">No se pudieron cargar temáticas.</div>';
+        }
+    }
+
+    function toggleTheme(button, id){
+      const allBtns = document.querySelectorAll('.theme-btn'); allBtns.forEach(b=>b.classList.remove('active'));
+      if(activeThemeId==id){ activeThemeId = null; } else { activeThemeId = id; button.classList.add('active'); }
+      currentPage = 1; fetchAndRender();
+    }
+    function toggleActiveThemeButton(){
+      document.querySelectorAll('.theme-btn').forEach(b=>{ if(b.dataset.id==activeThemeId) b.classList.add('active'); else b.classList.remove('active'); });
+    }
+
+    // Función para obtener sets. El parámetro 'search' busca por nombre Y set_num.
+    async function fetchSets({page=1, search='', ordering=lastSort, themeId=null}={}){
+      const minP = document.getElementById('min_parts').value;
+      const maxP = document.getElementById('max_parts').value;
+      const minY = document.getElementById('min_year').value;
+      const maxY = document.getElementById('max_year').value;
+
+      let url = `/sets/?page=${page}&page_size=${PAGE_SIZE}&ordering=${ordering}`;
+      if(search) url += `&search=${encodeURIComponent(search)}`;
+      if(themeId) url += `&theme_id=${themeId}`;
+      if(minP) url += `&min_parts=${minP}`;
+      if(maxP) url += `&max_parts=${maxP}`;
+      if (minY) url += `&min_year=${minY}`;
+      if (maxY) url += `&max_year=${maxY}`;
+      
+      const data = await apiFetch(url);
+      return data; 
+    }
+
+    async function fetchAndRender(){
+      const catalog = document.getElementById('catalog');
+      catalog.innerHTML = '<div style="grid-column:1/-1">Cargando sets...</div>';
+      const q = document.getElementById('search').value.trim();
+      lastSort = document.getElementById('sort').value;
+      
+      // Deshabilitar controles mientras se carga
+      document.getElementById('reload').disabled = true;
+      document.getElementById('search-btn').disabled = true;
+
+      try{
+        const data = await fetchSets({page:currentPage, search:q, ordering:lastSort, themeId: activeThemeId});
+        renderCatalog(data);
+        renderPager(data);
+        data.results.forEach(set => setsDetailsCache[set.set_num] = set);
+      }catch(err){
+        catalog.innerHTML = '<div style="grid-column:1/-1;color:var(--muted)">Error cargando sets — revisa la consola.</div>';
+        console.error(err);
+      }finally {
+        // Habilitar controles
+        document.getElementById('reload').disabled = false;
+        document.getElementById('search-btn').disabled = false;
+      }
+    }
+
+    // Renderizado del Catálogo
+    function renderCatalog(data){
+      const catalog = document.getElementById('catalog');
+      catalog.innerHTML = '';
+      const sets = data.results || [];
+      if(sets.length===0){ catalog.innerHTML = '<div style="grid-column:1/-1;color:var(--muted)">No se encontraron sets con esos criterios.</div>'; return }
+
+      sets.forEach(set => {
+        const item = inventory[set.set_num];
+        const numSets = (item && item.qty) || 0;
+        const statusColor = numSets > 0 ? '#10b981' : 'var(--muted)';
+        const addButtonText = numSets > 0 ? `Agregar otro (+${numSets})` : 'Agregar a Colección';
+        const el = document.createElement('article'); el.className='card';
+        
+        el.innerHTML = `
+          <div class='imgwrap'><img src='${set.set_img_url || ''}' alt='${escapeHtml(set.name)}' style='max-width:100%;max-height:100%;object-fit:contain;border-radius:10px'/></div>
+          <h4 class='product-name'>${escapeHtml(set.name)}</h4>
+          <p class='product-desc'>
+            ID Set: ${set.set_num || '—'} 
+            <br>Año: ${set.year_released || '—'} • Piezas: ${fmt(set.num_parts) || '—'}
+          </p>
+          <div class='price-row'>
+            <div class='collection-status' style='font-size: 14px; color:${statusColor}'>Sets en Colección: ${numSets}</div>
+            <div style='display:flex;gap:8px'>
+              <button class='tiny-btn add-btn' data-setnum='${set.set_num}'>${addButtonText}</button>
+              <a href="detalles.html?set_num=${set.set_num}" class='tiny-btn' style="text-decoration:none; color: var(--muted);" data-view='${set.set_num}'>Detalles</a>
+            </div>
+          </div>
+        `;
+        catalog.appendChild(el);
+      });
+
+      document.querySelectorAll('.add-btn').forEach(b => b.addEventListener('click', (e)=>{
+        const id = e.currentTarget.dataset.setnum; 
+        addToInventory(id); 
+        e.currentTarget.innerText='¡Agregado!'; 
+        // Esperar un poco y recargar la página actual para actualizar el contador
+        setTimeout(()=>fetchAndRender(), 400); 
+      }));
+    }
+
+    function renderPager(data){
+        const pager = document.getElementById('pager');
+        pager.innerHTML = '';
+        const count = data.count || 0; const totalPages = Math.ceil(count / PAGE_SIZE);
+        const info = document.createElement('div'); info.style.color='var(--muted)'; info.innerText = `Página ${currentPage} de ${totalPages} — ${fmt(count)} sets encontrados`;
+        const prev = document.createElement('button'); prev.className='tiny-btn'; prev.innerText='« Anterior'; prev.disabled = !data.previous;
+        const next = document.createElement('button'); next.className='tiny-btn'; next.innerText='Siguiente »'; next.disabled = !data.next;
+        prev.addEventListener('click', ()=>{ if(currentPage>1){ currentPage--; fetchAndRender(); } });
+        next.addEventListener('click', ()=>{ if(currentPage<totalPages){ currentPage++; fetchAndRender(); } });
+        pager.appendChild(prev); pager.appendChild(info); pager.appendChild(next);
+    }
+
+    // UI wiring
+    // 1. Aplicar Filtros (incluye filtros de piezas y año)
+    document.getElementById('reload').addEventListener('click', ()=>{ currentPage=1; fetchAndRender(); });
+    
+    // 2. Botón Buscar (solo búsqueda por texto/ID)
+    document.getElementById('search-btn').addEventListener('click', ()=>{ currentPage=1; fetchAndRender(); });
+    
+    // 3. Enter en el campo de búsqueda
+    document.getElementById('search').addEventListener('keypress', (e) => {
+      // 13 es el keyCode para la tecla Enter
+      if (e.key === 'Enter') { 
+        e.preventDefault(); // Evitar el submit del formulario si estuviera en uno
+        currentPage=1; 
+        fetchAndRender();
+      }
+    });
+
+
+    // Init
+    (async function init(){ await loadThemes(); await fetchAndRender(); })();
+
+  </script>
+</body>
+</html>

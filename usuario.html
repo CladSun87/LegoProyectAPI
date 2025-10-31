@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi Usuario — Colección LEGO</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#ffcc00;--muted:#94a3b8;--primary-btn:linear-gradient(90deg,#0ea5e9,#7c3aed);--radius:14px;font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#071025 0%, #08142a 100%);color:#e6eef8;min-height:100vh;padding-left: 70px;}
+    /* --- SIDEBAR --- */
+    .sidebar{position:fixed;top:0;left:0;height:100%;width:70px;background:#050c18;padding:10px 0;display:flex;flex-direction:column;align-items:center;z-index:100;box-shadow:2px 0 10px rgba(0,0,0,0.5);}
+    .sidebar a{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--muted);padding:10px 0;width:100%;transition:background .2s;}
+    .sidebar a:hover{background:rgba(255,255,255,0.05);color:#fff;}
+    .sidebar a svg{width:24px;height:24px;margin-bottom:4px;}
+    .sidebar a span{font-size:10px;font-weight:600;}
+    .sidebar a.active{background:var(--primary-btn);color:#fff;}
+    /* --- HEADER & MAIN --- */
+    header{display:flex;align-items:center;justify-content:space-between;padding:20px 28px}
+    .brand{display:flex;gap:14px;align-items:center}
+    .logo{width:56px;height:56px;border-radius:12px;background:var(--primary-btn);display:flex;align-items:center;justify-content:center;font-weight:800;color:#081228}
+    .title{font-size:18px;font-weight:700}
+    .subtitle{font-size:12px;color:var(--muted);margin-top:2px}
+    main{padding:18px 28px 80px; max-width: 500px; margin: 0 auto;}
+    /* --- FORM STYLES --- */
+    .form-card { background: var(--card); padding: 30px; border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,0.4); margin-top: 50px;}
+    .form-card h2 { color: var(--accent); margin-top: 0; }
+    .form-card input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; }
+    .btn{background:var(--accent);color:#081228;padding:12px;border-radius:10px;font-weight:700;border:none;cursor:pointer;width: 100%; margin-top: 10px;}
+    .message { margin-top: 15px; padding: 10px; border-radius: 8px; font-weight: 600; text-align: center; }
+    .success { background-color: #10b981; color: #fff; }
+    .error { background-color: #ef4444; color: #fff; }
+    .toggle-link { display: block; text-align: center; color: #0ea5e9; text-decoration: none; margin-top: 20px; font-size: 14px; }
+
+    /* --- PROFILE STYLES --- */
+    .profile-card { background: var(--card); padding: 30px; border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,0.4); margin-top: 50px; text-align: center;}
+    .profile-card h1 { color: var(--accent); }
+    .profile-card p { color: var(--muted); font-size: 18px; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <a href="index.html">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+        <span>Inicio</span>
+    </a>
+    <a href="catalogo.html">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 6a1 1 0 011-1h10a1 1 0 011 1v10a1 1 0 01-1 1H5a1 1 0 01-1-1V6zM5 15h10v2a1 1 0 001 1H4a1 1 0 001-1v-2z"></path></svg>
+        <span>Catálogo</span>
+    </a>
+    <a href="coleccion.html">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+        <span>Colección</span>
+    </a>
+    <a href="usuario.html" class="active">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+        <span>Usuario</span>
+    </a>
+  </div>
+
+  <header>
+    <div class="brand">
+      <div class="logo">USER</div>
+      <div>
+        <div class="title">Gestión de Usuario</div>
+        <div class="subtitle">Simulación de inicio de sesión y perfil.</div>
+      </div>
+    </div>
+  </header>
+  
+  <main>
+    <div id="authContainer">
+      <div id="loginForm" class="form-card">
+        <h2>Iniciar Sesión</h2>
+        <input type="email" id="loginEmail" placeholder="Email (ej: test@coleccion.com)" required>
+        <input type="password" id="loginPassword" placeholder="Contraseña (ej: 12345)" required>
+        <button class="btn" onclick="handleLogin()">Entrar</button>
+        <div id="loginMessage" class="message" style="display:none;"></div>
+        <a href="#" class="toggle-link" onclick="toggleForm(false)">¿No tienes cuenta? Regístrate aquí.</a>
+      </div>
+
+      <div id="registerForm" class="form-card" style="display:none;">
+        <h2>Registro</h2>
+        <input type="text" id="registerName" placeholder="Nombre de Usuario" required>
+        <input type="email" id="registerEmail" placeholder="Email" required>
+        <input type="password" id="registerPassword" placeholder="Contraseña" required>
+        <button class="btn" onclick="handleRegister()">Crear Cuenta</button>
+        <div id="registerMessage" class="message" style="display:none;"></div>
+        <a href="#" class="toggle-link" onclick="toggleForm(true)">¿Ya tienes cuenta? Inicia Sesión.</a>
+      </div>
+    </div>
+
+    <div id="profileContainer" class="profile-card" style="display:none;">
+        <h1 id="profileName"></h1>
+        <p>Email: <span id="profileEmail"></span></p>
+        <p style="margin-top: 20px; color: #10b981; font-weight: 600;">Sesión de Prueba (datos en localStorage)</p>
+        <button class="btn" onclick="handleLogout()">Cerrar Sesión</button>
+    </div>
+  </main>
+
+  <script>
+    const USER_KEY = 'legoAppUser';
+    const SESSION_KEY = 'legoAppSession';
+
+    function getStoredUser() {
+        return JSON.parse(localStorage.getItem(USER_KEY));
+    }
+
+    function getSession() {
+        return localStorage.getItem(SESSION_KEY);
+    }
+
+    function setSession(email) {
+        localStorage.setItem(SESSION_KEY, email);
+    }
+
+    function clearSession() {
+        localStorage.removeItem(SESSION_KEY);
+    }
+
+    function showMessage(elementId, message, isError = false) {
+        const el = document.getElementById(elementId);
+        el.innerText = message;
+        el.className = 'message ' + (isError ? 'error' : 'success');
+        el.style.display = 'block';
+        setTimeout(() => el.style.display = 'none', 3000);
+    }
+
+    function toggleForm(showLogin) {
+        document.getElementById('loginForm').style.display = showLogin ? 'block' : 'none';
+        document.getElementById('registerForm').style.display = showLogin ? 'none' : 'block';
+    }
+
+    function handleRegister() {
+        const name = document.getElementById('registerName').value;
+        const email = document.getElementById('registerEmail').value;
+        const password = document.getElementById('registerPassword').value;
+
+        if (!name || !email || !password) {
+            return showMessage('registerMessage', 'Todos los campos son obligatorios.', true);
+        }
+
+        if (getStoredUser() && getStoredUser().email === email) {
+            return showMessage('registerMessage', 'El email ya está registrado.', true);
+        }
+
+        const newUser = { name, email, password }; 
+        localStorage.setItem(USER_KEY, JSON.stringify(newUser));
+
+        showMessage('registerMessage', 'Registro exitoso. Inicia sesión.', false);
+        toggleForm(true); 
+    }
+
+    function handleLogin() {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const storedUser = getStoredUser();
+
+        if (!storedUser) {
+            return showMessage('loginMessage', 'Usuario no registrado. Regístrate primero.', true);
+        }
+
+        if (storedUser.email === email && storedUser.password === password) {
+            setSession(email);
+            renderProfile();
+        } else {
+            showMessage('loginMessage', 'Email o contraseña incorrectos.', true);
+        }
+    }
+
+    function handleLogout() {
+        clearSession();
+        renderProfile();
+    }
+
+    function renderProfile() {
+        const session = getSession();
+        const storedUser = getStoredUser();
+
+        if (session && storedUser && storedUser.email === session) {
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('profileContainer').style.display = 'block';
+            document.getElementById('profileName').innerText = `¡Hola, ${storedUser.name}!`;
+            document.getElementById('profileEmail').innerText = storedUser.email;
+        } else {
+            document.getElementById('authContainer').style.display = 'block';
+            document.getElementById('profileContainer').style.display = 'none';
+            // Asegura que se vea el formulario de login por defecto
+            toggleForm(true); 
+        }
+    }
+
+    // Init
+    renderProfile();
+  </script>
+</body>
+</html>

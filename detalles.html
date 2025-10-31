@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Set LEGO</title>
+    <style>
+        :root{--bg:#0f1724;--card:#0b1220;--accent:#ffcc00;--muted:#94a3b8;--primary-btn:linear-gradient(90deg,#0ea5e9,#7c3aed);--radius:14px;font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+        *{box-sizing:border-box}
+        body{margin:0;background:linear-gradient(180deg,#071025 0%, #08142a 100%);color:#e6eef8;min-height:100vh;padding-left: 70px;}
+        /* --- SIDEBAR --- */
+        .sidebar{position:fixed;top:0;left:0;height:100%;width:70px;background:#050c18;padding:10px 0;display:flex;flex-direction:column;align-items:center;z-index:100;box-shadow:2px 0 10px rgba(0,0,0,0.5);}
+        .sidebar a{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--muted);padding:10px 0;width:100%;transition:background .2s;}
+        .sidebar a:hover{background:rgba(255,255,255,0.05);color:#fff;}
+        .sidebar a svg{width:24px;height:24px;margin-bottom:4px;}
+        .sidebar a span{font-size:10px;font-weight:600;}
+        /* --- HEADER --- */
+        header{display:flex;align-items:center;justify-content:space-between;padding:20px 28px}
+        .brand{display:flex;gap:14px;align-items:center}
+        .logo{width:56px;height:56px;border-radius:12px;background:var(--primary-btn);display:flex;align-items:center;justify-content:center;font-weight:800;color:#081228}
+        .title{font-size:18px;font-weight:700}
+        .subtitle{font-size:12px;color:var(--muted);margin-top:2px}
+        main{padding:20px 28px}
+        .container{max-width: 1200px; margin: 0 auto;}
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+            background: var(--card);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        .image-section img {
+            max-width: 100%;
+            height: auto;
+            max-height: 400px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .info-section h1 {
+            color: var(--accent);
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .info-section h2 {
+            font-size: 24px;
+            margin-top: 20px;
+            color: #0ea5e9;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 5px;
+        }
+        .meta-data {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .meta-item {
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .meta-item strong {
+            display: block;
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 400;
+        }
+        .meta-item span {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .part-list-item {
+            background: rgba(255,255,255,0.02);
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+        .loading { text-align: center; padding: 50px; }
+        .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);font-weight:600}
+        @media (max-width: 800px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .meta-data {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <a href="index.html">
+            <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+            <span>Inicio</span>
+        </a>
+        <a href="catalogo.html">
+            <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 6a1 1 0 011-1h10a1 1 0 011 1v10a1 1 0 01-1 1H5a1 1 0 01-1-1V6zM5 15h10v2a1 1 0 001 1H4a1 1 0 001-1v-2z"></path></svg>
+            <span>Catálogo</span>
+        </a>
+        <a href="coleccion.html">
+            <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+            <span>Colección</span>
+        </a>
+        <a href="usuario.html">
+            <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+            <span>Usuario</span>
+        </a>
+    </div>
+    
+    <header>
+        <div class="brand">
+          <div class="logo">INFO</div>
+          <div>
+            <div class="title">Detalles del Set</div>
+            <div class="subtitle" id="setSubtitle">Cargando...</div>
+          </div>
+        </div>
+        <a href="catalogo.html" class="btn ghost" style="text-decoration: none;">« Volver al Catálogo</a>
+    </header>
+
+    <main class="container">
+        <div id="loading" class="loading">Cargando detalles del set...</div>
+        <div id="setDetails" style="display:none;">
+            <div class="details-grid">
+                <div class="image-section">
+                    <img id="setImg" src="" alt="Imagen del Set">
+                </div>
+                <div class="info-section">
+                    <h1 id="setName"></h1>
+                    <p id="setTheme" style="color:var(--muted); font-size:16px; margin-bottom: 20px;"></p>
+
+                    <h2>Datos Principales</h2>
+                    <div class="meta-data">
+                        <div class="meta-item"><strong>ID del Set</strong><span id="setNum"></span></div>
+                        <div class="meta-item"><strong>Año de Lanzamiento</strong><span id="setYear"></span></div>
+                        <div class="meta-item"><strong>Número de Piezas</strong><span id="setParts"></span></div>
+                        <div class="meta-item"><strong>Estado en Colección</strong><span id="inCollection">0 Sets</span></div>
+                    </div>
+
+                    <h2>Inventario de Piezas (Primeras 10)</h2>
+                    <div id="setPartsList">Cargando inventario...</div>
+                    <a id="setUrl" href="#" target="_blank" style="display: block; margin-top: 20px; color:#0ea5e9; text-decoration:none; font-weight: 600;">Ver todos los detalles en Rebrickable →</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_KEY = '1e6240a0d3dc2d161d3463cf24e830a8';
+        const BASE = 'https://rebrickable.com/api/v3/lego';
+
+        function getSetNumFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('set_num');
+        }
+
+        function fmt(n){return n.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+
+        async function apiFetch(path){
+            const res = await fetch(BASE + path, {headers: {'Authorization': `key ${API_KEY}`}});
+            if(!res.ok){
+                const text = await res.text();
+                throw new Error('API error: '+res.status+' - '+text);
+            }
+            return res.json();
+        }
+
+        async function loadSetDetails() {
+            const set_num = getSetNumFromUrl();
+            if (!set_num) {
+                document.getElementById('loading').innerHTML = 'Error: No se proporcionó el número de set.';
+                return;
+            }
+
+            try {
+                const inventory = JSON.parse(localStorage.getItem('legoInventory')) || {};
+                const setsInCollection = (inventory[set_num] && inventory[set_num].qty) || 0;
+
+                // 1. Obtener detalles básicos del Set
+                const details = await apiFetch(`/sets/${encodeURIComponent(set_num)}/`);
+                
+                document.getElementById('setSubtitle').innerText = details.name;
+
+                // 2. Renderizar información principal
+                document.getElementById('setImg').src = details.set_img_url || 'placeholder.jpg';
+                document.getElementById('setImg').alt = details.name;
+                document.getElementById('setName').innerText = details.name;
+                document.getElementById('setNum').innerText = details.set_num;
+                document.getElementById('setYear').innerText = details.year_released;
+                document.getElementById('setParts').innerText = fmt(details.num_parts);
+                document.getElementById('setUrl').href = details.set_url;
+                document.getElementById('inCollection').innerText = `${setsInCollection} Sets`;
+
+                // 3. Obtener el nombre del Tema
+                if (details.theme_id) {
+                    const themeDetails = await apiFetch(`/themes/${details.theme_id}/`);
+                    document.getElementById('setTheme').innerText = 'Temática: ' + themeDetails.name;
+                }
+
+                // 4. Obtener Inventario de Piezas
+                const setInventory = await apiFetch(`/sets/${encodeURIComponent(set_num)}/parts/?page_size=10`); 
+                const partsList = document.getElementById('setPartsList');
+                partsList.innerHTML = '';
+
+                if (setInventory.results && setInventory.results.length > 0) {
+                    setInventory.results.forEach(item => {
+                        const colorDetails = item.color.name || 'Color Desconocido';
+                        const partName = item.part.name || 'Pieza Desconocida';
+                        const element = document.createElement('div');
+                        element.className = 'part-list-item';
+                        element.innerHTML = `
+                            <span>${item.quantity}x ${partName}</span>
+                            <span style="color: ${colorDetails.toLowerCase() === 'black' ? '#ccc' : colorDetails.toLowerCase()};">(${colorDetails})</span>
+                        `;
+                        partsList.appendChild(element);
+                    });
+                    if(setInventory.count > 10){
+                        partsList.innerHTML += `<div style="text-align:center; margin-top: 10px; color: var(--muted); font-size: 12px;">... y ${setInventory.count - 10} piezas más.</div>`;
+                    }
+                } else {
+                    partsList.innerHTML = '<div style="color:var(--muted); font-size:14px;">No hay información detallada del inventario de piezas disponible.</div>';
+                }
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('setDetails').style.display = 'block';
+
+            } catch (error) {
+                console.error('Error cargando detalles:', error);
+                document.getElementById('loading').innerHTML = 'Error al cargar los detalles del set. Intenta de nuevo más tarde.';
+            }
+        }
+
+        // Ejecutar carga
+        loadSetDetails();
+    </script>
+</body>
+</html>
