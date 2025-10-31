@@ -1,221 +1,382 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="diavlo.css"> 
-    <title>Testeo API Rebrickable - Sets y Colores</title>
-    <style>
-        /* Estilos básicos para el ejemplo */
-        body { font-family: sans-serif; }
-        .api-container {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
-        .set-item, .color-item {
-            border-bottom: 1px dashed #eee;
-            padding: 10px 0;
-            display: flex;
-            align-items: center;
-        }
-        .set-item img {
-            width: 80px;
-            height: auto;
-            margin-right: 15px;
-            border-radius: 4px;
-        }
-        .color-swatch {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
-            border: 1px solid #333;
-            border-radius: 50%;
-        }
-        #loader-container-sets, #loader-container-colores {
-            text-align: center;
-            padding: 20px;
-            font-size: 1.2em;
-            color: #555;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrickMaster — Colección LEGO</title>
+  <style>
+    :root {
+      --bg: #0f1724;
+      --card:#0b1220;
+      --accent: #ffcc00;
+      --muted: #94a3b8;
+      --primary-btn:linear-gradient(90deg,#0ea5e9,#7c3aed);
+      --radius: 14px;
+      font-family: "Poppins", Inter, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: linear-gradient(180deg, #081428, #0a1a33);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      padding-left: 70px; /* Espacio para el sidebar */
+    }
+    /* --- SIDEBAR --- */
+    .sidebar{position:fixed;top:0;left:0;height:100%;width:70px;background:rgba(5, 12, 24, 0.95);padding:10px 0;display:flex;flex-direction:column;align-items:center;z-index:100;box-shadow:2px 0 10px rgba(0,0,0,0.5);}
+    .sidebar a{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--muted);padding:10px 0;width:100%;transition:background .2s;}
+    .sidebar a:hover{background:rgba(255,255,255,0.05);color:#fff;}
+    .sidebar a svg{width:24px;height:24px;margin-bottom:4px;}
+    .sidebar a span{font-size:10px;font-weight:600;}
+    .sidebar a.active{background:var(--primary-btn);color:#fff;}
+    /* --- HEADER --- */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 28px; /* Ajuste para el sidebar */
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .main-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    nav { display: none; } /* Ocultar nav original para usar sidebar */
+
+    /* Carrusel */
+    .carousel {
+      position: relative;
+      width: 100%;
+      height: 90vh;
+      overflow: hidden;
+    }
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0; left: 0;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* Estilo para que las imágenes random se vean bien */
+      filter: saturate(1.1) brightness(0.9);
+    }
+    .slide.active { opacity: 1; z-index: 1; }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+    }
+    .slide-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 700px;
+      padding: 20px;
+      background: rgba(8, 12, 19, 0.7);
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .slide-content h1 {
+      font-size: 48px;
+      color: var(--accent);
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px rgba(0,0,0,0.8);
+    }
+    .slide-content p {
+      font-size: 18px;
+      margin-bottom: 30px;
+      color: #ccc;
+    }
+    .btn {
+      padding: 14px 28px;
+      background: var(--primary-btn);
+      color: #fff;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.3s ease;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.5);
+    }
+    .btn:hover { opacity: 0.9; }
+
+    /* Botones navegación */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.6);
+      color: var(--accent);
+      border: none;
+      font-size: 32px;
+      padding: 10px 18px;
+      cursor: pointer;
+      z-index: 3;
+      border-radius: 50%;
+      transition: background 0.3s ease;
+    }
+    .nav-btn:hover { background: rgba(0,0,0,0.8); }
+    .prev { left: 20px; }
+    .next { right: 20px; }
+
+    /* Indicadores */
+    .indicators {
+      position: absolute;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 3;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .dot.active { background: var(--accent); }
+
+    /* Secciones inferiores (Mantienen estilos) */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      padding: 60px 40px;
+      background: rgba(255,255,255,0.05);
+    }
+    .feature {
+      background: rgba(255,255,255,0.05);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+    }
+    .feature h3 { color: var(--accent); margin-bottom: 10px; }
+
+    .about {
+      padding: 60px 40px;
+      text-align: center;
+      background: linear-gradient(180deg, #0a1a33, #0f1724);
+    }
+    .about h2 {
+      color: var(--accent);
+      margin-bottom: 20px;
+      font-size: 32px;
+    }
+    .about p {
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 18px;
+      color: var(--muted);
+    }
+
+    footer {
+      padding: 20px 40px;
+      background: rgba(255,255,255,0.05);
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
-    <header class="shadow">
-        <div class="container-logo">
-            <img src="pochita.jpg" alt="logo">
-        </div>
-        <div>
-            <button id="dark-mode"> DARK MODE</button>
-        </div>
+
+  <div class="sidebar">
+    <a href="index.html" class="active">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+        <span>Inicio</span>
+    </a>
+    <a href="catalogo.html">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 6a1 1 0 011-1h10a1 1 0 011 1v10a1 1 0 01-1 1H5a1 1 0 01-1-1V6zM5 15h10v2a1 1 0 001 1H4a1 1 0 001-1v-2z"></path></svg>
+        <span>Catálogo</span>
+    </a>
+    <a href="coleccion.html">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+        <span>Colección</span>
+    </a>
+    <a href="usuario.html">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+        <span>Usuario</span>
+    </a>
+  </div>
+
+  <header>
+    <div class="main-title">BrickMaster</div>
     </header>
 
-    <section class="container-title">
-        <h1>Testeo Completo API Rebrickable 🧱</h1>
-        <p>Probando Set de LEGO (<code>/lego/sets/</code>) y Colores (<code>/lego/colors/</code>)</p>
-    </section>
+  <section class="carousel" id="inicio">
+    <div class="slide active">
+      <div class="overlay"></div>
+      <div class="slide-content">
+        <h1>...</h1>
+        <p>...</p>
+        <a href="catalogo.html" class="btn">...</a>
+      </div>
+    </div>
 
-    <section class="api-container" id="container-sets"> 
-        <h2>Sets Recientes</h2>
-    </section>
-    <button id="load-more-sets">Cargar más Sets</button>
+    <div class="slide">
+      <div class="overlay"></div>
+      <div class="slide-content">
+        <h1>...</h1>
+        <p>...</p>
+        <a href="catalogo.html" class="btn">...</a>
+      </div>
+    </div>
 
-    <section class="api-container" id="container-colores"> 
-        <h2>Lista de Colores</h2>
-    </section>
-    <button id="load-more-colors">Cargar más Colores</button>
+    <div class="slide">
+      <div class="overlay"></div>
+      <div class="slide-content">
+        <h1>...</h1>
+        <p>...</p>
+        <a href="catalogo.html" class="btn">...</a>
+      </div>
+    </div>
+
+    <button class="nav-btn prev">&#10094;</button>
+    <button class="nav-btn next">&#10095;</button>
+
+    <div class="indicators">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature">
+      <h3>Sets Exclusivos</h3>
+      <p>Encuentra colecciones únicas y ediciones limitadas de tus temas favoritos.</p>
+    </div>
+    <div class="feature">
+      <h3>Diseña y Crea</h3>
+      <p>Imagina, construye y comparte tus propias creaciones con otros fans.</p>
+    </div>
+    <div class="feature">
+      <h3>Colección Digital</h3>
+      <p>Lleva un registro de todos tus sets y las piezas que posees de forma digital.</p>
+    </div>
+  </section>
+
+  <section class="about" id="nosotros">
+    <h2>Sobre Nosotros</h2>
+    <p>Somos fanáticos del mundo LEGO. Nuestro objetivo es inspirar creatividad, diversión y aprendizaje a través de cada bloque. Construye tu historia con nosotros y forma parte de una comunidad global de creadores.</p>
+  </section>
+
+  <footer>
+    © 2025 BrickMaster | Todos los derechos reservados.
+  </footer>
+
+  <script>
+    const API_KEY = '1e6240a0d3dc2d161d3463cf24e830a8';
+    const BASE = 'https://rebrickable.com/api/v3/lego';
     
-    <script>
-        // 🔑 TU CLAVE API REAL GENERADA 🔑
-        const API_KEY = '1e6240a0d3dc2d161d3463cf24e830a8'; 
+    // Contenido estático del carrusel (textos de presentación)
+    const SLIDE_CONTENT = [
+        {title: "Tu Colección Perfecta", p: "Agrega, gestiona y marca tus sets favoritos. El inventario definitivo para tu pasión LEGO.", linkText: "Ver Catálogo"},
+        {title: "Descubre el Universo LEGO", p: "Explora miles de sets, filtra por tema, piezas y año de lanzamiento. ¡Encuentra tu próximo set!", linkText: "Ir al Catálogo"},
+        {title: "Comunidad y Creación", p: "Diseña, construye y comparte tus propias creaciones. Únete a una comunidad global de constructores.", linkText: "Ir al Catálogo"},
+    ];
+
+    /**
+     * @brief Fetches random set images from Rebrickable API.
+     * @returns {Promise<string[]>} Array of image URLs.
+     */
+    async function fetchRandomSetImages() {
+        try {
+            // Se piden 30 sets recientes o populares para tener variedad de imágenes
+            const res = await fetch(BASE + `/sets/?page_size=30&ordering=-year_released`, {
+                headers: {'Authorization': `key ${API_KEY}`}
+            });
+            if (!res.ok) throw new Error('API error: ' + res.status);
+            const data = await res.json();
+            
+            // Filtra los sets que sí tienen imagen y escoge 3 índices aleatorios
+            const setsWithImages = data.results.filter(s => s.set_img_url);
+            const randomIndices = [];
+            while (randomIndices.length < 3) {
+                const randIndex = Math.floor(Math.random() * setsWithImages.length);
+                if (!randomIndices.includes(randIndex) && setsWithImages[randIndex]) {
+                    randomIndices.push(randIndex);
+                }
+            }
+            
+            return randomIndices.map(i => setsWithImages[i].set_img_url);
+
+        } catch (error) {
+            console.error("Error fetching random images:", error);
+            // Imágenes de respaldo en caso de fallo de la API
+            return [
+                'https://www.lego.com/cdn/cs/set/assets/bltefcbdf317c34e8b3/lego-starwars-hero.jpg',
+                'https://www.lego.com/cdn/cs/set/assets/blt8d3f43e8e03e4c4a/lego-technic-banner.jpg',
+                'https://www.lego.com/cdn/cs/set/assets/blt508f68c8a8c0e1cc/lego-marvel-banner.jpg'
+            ];
+        }
+    }
+
+    async function initCarousel() {
+        const images = await fetchRandomSetImages();
+        const slides = document.querySelectorAll(".slide");
         
-        // La clave se envía en el encabezado de autorización
-        const AUTH_HEADERS = {
-            'Authorization': `key ${API_KEY}`
+        // Asignar contenido e imagen a cada slide
+        slides.forEach((slide, i) => {
+            const imgUrl = images[i % images.length]; // Asegura que no falte imagen
+            slide.style.backgroundImage = `url('${imgUrl}')`;
+            
+            const content = SLIDE_CONTENT[i % SLIDE_CONTENT.length];
+            slide.querySelector('h1').innerText = content.title;
+            slide.querySelector('p').innerText = content.p;
+            slide.querySelector('.btn').innerText = content.linkText;
+        });
+        
+        // Lógica de funcionamiento del carrusel
+        const dots = document.querySelectorAll(".dot");
+        let index = 0;
+        const total = slides.length;
+
+        const showSlide = (i) => {
+            slides.forEach(s => s.classList.remove("active"));
+            dots.forEach(d => d.classList.remove("active"));
+            slides[i].classList.add("active");
+            dots[i].classList.add("active");
+            index = i;
         };
 
-        const BASE_URL_SETS = 'https://rebrickable.com/api/v3/lego/sets/';
-        const BASE_URL_COLORS = 'https://rebrickable.com/api/v3/lego/colors/';
-
-        let nextSetUrl = BASE_URL_SETS; 
-        let nextColorUrl = BASE_URL_COLORS;
-
-        // --- Funciones de Utilidad (Loader) ---
-
-        function renderLoader(containerId){
-            const container = document.getElementById(containerId);
-            let loader = document.getElementById(`loader-${containerId}`);
-            if (!loader) {
-                loader = document.createElement('div');
-                loader.setAttribute('id', `loader-${containerId}`);
-                loader.innerHTML = 'Cargando datos LEGO... ⏳'; 
-                container.appendChild(loader);
-            }
-        }
-
-        function removeLoader(containerId){
-            const loader = document.getElementById(`loader-${containerId}`);
-            if (loader){
-                loader.remove(); 
-            }
-        }
-
-        // --- Renderizado de SETS ---
-
-        function renderSet(set) {
-            const container = document.getElementById('container-sets');
-            const setItem = document.createElement('div');
-            setItem.classList.add('set-item');
-            
-            const img = document.createElement('img');
-            img.src = set.set_img_url || ''; // Usamos || '' para evitar errores si la URL es nula
-            img.alt = set.name;
-
-            const details = document.createElement('div');
-            details.innerHTML = `<strong>${set.name}</strong> (${set.set_num})<br>Partes: ${set.num_parts}`;
-
-            setItem.appendChild(img);
-            setItem.appendChild(details);
-            container.appendChild(setItem);
-        }
-
-        // --- Renderizado de COLORES ---
-
-        function renderColor(color) {
-            const container = document.getElementById('container-colores');
-            const colorItem = document.createElement('div');
-            colorItem.classList.add('color-item');
-            
-            const swatch = document.createElement('div');
-            swatch.classList.add('color-swatch');
-            swatch.style.backgroundColor = '#' + color.rgb; 
-            
-            const details = document.createElement('span');
-            details.textContent = `${color.name} (ID: ${color.id}, Hex: #${color.rgb})`;
-
-            colorItem.appendChild(swatch);
-            colorItem.appendChild(details);
-            container.appendChild(colorItem);
-        }
-
-        // --- Función Genérica de Fetch ---
-
-        async function fetchApiData(url, containerId, renderFunction, loadMoreButtonId) {
-            if (!url) {
-                document.getElementById(loadMoreButtonId).textContent = `No hay más datos para cargar.`;
-                document.getElementById(loadMoreButtonId).disabled = true;
-                return null;
-            }
-
-            renderLoader(containerId);
-            
-            try {
-                // Petición con tu clave API real en el encabezado
-                const response = await fetch(url, { headers: AUTH_HEADERS });
-
-                if (!response.ok) {
-                    // Esto capturaría un error 401 si la clave fuera incorrecta (pero la tuya ya es real)
-                    throw new Error(`Error ${response.status}: ${response.statusText}.`);
-                }
-
-                const data = await response.json();
-                
-                data.results.forEach(renderFunction);
-
-                // Devuelve la URL de la próxima página para paginación
-                return data.next;
-
-            } catch (error) {
-                console.error(`Error al obtener los datos de ${containerId}:`, error);
-                document.getElementById(containerId).innerHTML = `<p style="color: red;">❌ ¡Error al cargar! Revisa la consola y asegúrate de usar un Servidor Web Local. (${error.message})</p>`;
-                document.getElementById(loadMoreButtonId).disabled = true;
-                return null; 
-
-            } finally {
-                removeLoader(containerId);
-            }
-        }
-
-        // --- Wrappers de Carga ---
-
-        async function get_sets() {
-            const loadMoreButtonId = 'load-more-sets';
-            nextSetUrl = await fetchApiData(
-                nextSetUrl, 
-                'container-sets', 
-                renderSet, 
-                loadMoreButtonId
-            );
-            if (!nextSetUrl) {
-                 document.getElementById(loadMoreButtonId).textContent = 'Todos los Sets cargados';
-            }
-        }
-
-        async function get_colores() {
-            const loadMoreButtonId = 'load-more-colors';
-            nextColorUrl = await fetchApiData(
-                nextColorUrl, 
-                'container-colores', 
-                renderColor, 
-                loadMoreButtonId
-            );
-            if (!nextColorUrl) {
-                document.getElementById(loadMoreButtonId).textContent = 'Todos los colores cargados';
-            }
-        }
-
-        // --- Inicialización y Eventos ---
-
-        get_sets(); 
-        get_colores();
-
-        document.getElementById("load-more-sets").addEventListener('click', get_sets); 
-        document.getElementById("load-more-colors").addEventListener('click', get_colores); 
-
-        document.getElementById("dark-mode").addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
+        document.querySelector(".next").addEventListener("click", () => {
+            index = (index + 1) % total;
+            showSlide(index);
         });
-    </script>
+        document.querySelector(".prev").addEventListener("click", () => {
+            index = (index - 1 + total) % total;
+            showSlide(index);
+        });
+        dots.forEach((dot, i) => {
+            dot.addEventListener("click", () => showSlide(i));
+        });
+
+        // Carrusel automático
+        setInterval(() => {
+            index = (index + 1) % total;
+            showSlide(index);
+        }, 6000);
+        
+        // Mostrar el primer slide al iniciar
+        showSlide(0);
+    }
+
+    document.addEventListener('DOMContentLoaded', initCarousel);
+  </script>
 </body>
 </html>
