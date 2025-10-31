@@ -3,42 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mi Colección de Sets LEGO</title>
-  <style>
-    :root{--bg:#0f1724;--card:#0b1220;--accent:#ffcc00;--muted:#94a3b8;--primary-btn:linear-gradient(90deg,#0ea5e9,#7c3aed);--radius:14px;font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
-    *{box-sizing:border-box}
-    body{margin:0;background:linear-gradient(180deg,#071025 0%, #08142a 100%);color:#e6eef8;min-height:100vh;padding-left: 70px;}
-    /* --- SIDEBAR --- */
-    .sidebar{position:fixed;top:0;left:0;height:100%;width:70px;background:#050c18;padding:10px 0;display:flex;flex-direction:column;align-items:center;z-index:100;box-shadow:2px 0 10px rgba(0,0,0,0.5);}
-    .sidebar a{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--muted);padding:10px 0;width:100%;transition:background .2s;}
-    .sidebar a:hover{background:rgba(255,255,255,0.05);color:#fff;}
-    .sidebar a svg{width:24px;height:24px;margin-bottom:4px;}
-    .sidebar a span{font-size:10px;font-weight:600;}
-    .sidebar a.active{background:var(--primary-btn);color:#fff;}
-    /* --- HEADER --- */
-    header{display:flex;align-items:center;justify-content:space-between;padding:20px 28px}
-    .brand{display:flex;gap:14px;align-items:center}
-    .logo{width:56px;height:56px;border-radius:12px;background:var(--primary-btn);display:flex;align-items:center;justify-content:center;font-weight:800;color:#081228}
-    .title{font-size:18px;font-weight:700}
-    .subtitle{font-size:12px;color:var(--muted);margin-top:2px}
-    main{padding:18px 28px 80px}
-    /* --- COLECCION GRID --- */
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;margin-top: 20px;}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 6px 18px rgba(2,6,23,0.6); position: relative;}
-    .imgwrap{height:170px;border-radius:12px;background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
-    .product-name{font-weight:700;margin:0 0 6px}
-    .product-desc{font-size:13px;color:var(--muted);margin:0 0 10px}
-    .price-row{display:flex;align-items:center;justify-content:space-between}
-    .collection-status{font-weight:800;color:#10b981;}
-    .action-row{display: flex; gap: 8px; justify-content: space-between; align-items: center;}
-    .tiny-btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:6px 10px;border-radius:8px;cursor:pointer;color:var(--muted); font-size: 12px;}
-    .favorite-btn { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.5); border: none; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-    .favorite-btn.active svg{ fill: var(--accent); }
-    .favorite-btn svg{ fill: var(--muted); width: 16px; height: 16px; transition: fill .2s;}
-    .stats-card { background: var(--card); padding: 20px; border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.05); }
-    .stats-card h2 { color: var(--accent); margin-top: 0; font-size: 24px; }
-    .stats-card p { font-size: 36px; font-weight: 800; margin: 5px 0 0; }
-  </style>
+  <title>Mi Colección — BrickMaster</title>
+  <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
   <div class="sidebar">
@@ -62,42 +28,61 @@
 
   <header>
     <div class="brand">
-      <div class="logo">COL</div>
+      <div class="logo" style="background: #10b981;">MY</div>
       <div>
-        <div class="title">Mi Colección de Sets</div>
-        <div class="subtitle">Sets que has agregado a tu inventario.</div>
+        <div class="title">Mis Sets de LEGO</div>
+        <div class="subtitle">Sets que has agregado a tu colección personal.</div>
       </div>
     </div>
   </header>
+  
   <main>
-    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-        <div class="stats-card">
-            <h2>Total de Sets</h2>
-            <p id="totalSetsCount">0</p>
+    <div class="controls">
+      <div class="search control-group">
+        <label for="search">Buscar en mi Colección:</label>
+        <div class="search-input-group">
+          <input type="search" id="search" placeholder="Nombre o ID Set..." />
+          <button class="btn" id="search-btn">Buscar</button> 
         </div>
-        <div class="stats-card">
-            <h2>Piezas Acumuladas</h2>
-            <p id="totalPartsCount">0</p>
-        </div>
-        <div class="stats-card">
-            <h2>Sets Favoritos</h2>
-            <p id="totalFavoritesCount">0</p>
-        </div>
+      </div>
+      <div class="control-group">
+        <label for="sort">Ordenar por:</label>
+        <select id="sort" class="ghost" style="width: 150px;">
+          <option value="name">Nombre (A-Z)</option>
+          <option value="-name">Nombre (Z-A)</option>
+          <option value="-year_released">Más recientes</option>
+          <option value="num_parts">Piezas (asc)</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="filter_fav">Filtro:</label>
+        <select id="filter_fav" class="ghost" style="width: 120px;">
+          <option value="all">Mostrar todos</option>
+          <option value="fav">Solo favoritos</option>
+        </select>
+      </div>
+      <button class="btn" id="reload">Aplicar Filtros</button>
     </div>
 
-    <h2 style="margin-top: 30px; color: #fff;">Inventario Detallado</h2>
-    <div id="collectionList" class="grid">
-        </div>
+    <div style="margin-bottom: 15px; color: var(--muted);" id="collectionStats">Cargando estadísticas...</div>
+
+    <section class="grid" id="collectionGrid"></section>
+
+    <div class="note" style="margin-top: 20px;">Nota: La información de los sets se obtiene de la caché y de Rebrickable.</div>
   </main>
 
   <script>
     const API_KEY = '1e6240a0d3dc2d161d3463cf24e830a8';
     const BASE = 'https://rebrickable.com/api/v3/lego';
+
+    // *** CAMBIO: inventory ya no guarda qty, solo isFavorite. ***
     let inventory = JSON.parse(localStorage.getItem('legoInventory')) || {}; 
-    let setsDetailsCache = {}; 
+    let allSetsDetails = []; 
 
     function fmt(n){return n.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-    function saveInventory(){ localStorage.setItem('legoInventory', JSON.stringify(inventory)); }
+    function saveInventory(){ 
+        localStorage.setItem('legoInventory', JSON.stringify(inventory)); 
+    }
     function escapeHtml(s){ return s ? s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) : ''; }
 
     async function apiFetch(path){
@@ -106,116 +91,169 @@
       return res.json();
     }
     
-    // Obtiene detalles del set usando caché
-    async function getSetDetails(setnum){
-        if(setsDetailsCache[setnum]) return setsDetailsCache[setnum];
-        const detail = await apiFetch(`/sets/${encodeURIComponent(setnum)}/`);
-        setsDetailsCache[setnum] = detail;
-        return detail;
-    }
-
-    // Funciones de gestión de colección
-    function removeOneFromInventory(setnum){
-        if(!inventory[setnum]) return;
-
-        if (inventory[setnum].qty > 1) {
-             inventory[setnum].qty -= 1;
-        } else {
-             delete inventory[setnum]; // Elimina completamente si solo queda 1
+    // Funciones de gestión de inventario
+    function removeSet(setnum){
+        if(confirm(`¿Estás seguro de que quieres QUITAR el set ${setnum} de tu colección?`)){
+            delete inventory[setnum];
+            saveInventory();
+            (async function(){ 
+                allSetsDetails = await fetchCollectionDetails(); 
+                filterAndRender(); 
+            })();
         }
-        saveInventory();
-        renderCollection();
     }
     
     function toggleFavorite(setnum){
         if(!inventory[setnum]) return;
         inventory[setnum].isFavorite = !inventory[setnum].isFavorite;
         saveInventory();
-        renderCollection();
+        filterAndRender(); 
     }
 
-    async function renderCollection(){
-      const container = document.getElementById('collectionList');
-      container.innerHTML = '';
-      let totalSets = 0; 
-      let totalParts = 0;
-      let totalFavorites = 0;
-      
-      const setNums = Object.keys(inventory);
+    // 1. Carga los detalles de todos los sets en la colección
+    async function fetchCollectionDetails() {
+        const setNums = Object.keys(inventory);
+        if (setNums.length === 0) return [];
 
-      if(setNums.length === 0){
-        container.innerHTML = '<div style="grid-column:1/-1; text-align:center; color: var(--muted); padding-top: 50px;">Aún no tienes sets en tu colección. Agrégalos desde el Catálogo.</div>';
-        document.getElementById('totalSetsCount').innerText = 0;
-        document.getElementById('totalPartsCount').innerText = 0;
-        document.getElementById('totalFavoritesCount').innerText = 0;
-        return;
-      }
+        const promises = setNums.map(setnum => 
+            apiFetch(`/sets/${setnum}/`)
+            .catch(err => {
+                console.warn(`Error fetching details for set ${setnum}:`, err);
+                return null; 
+            })
+        );
 
-      // Ordenar: Favoritos primero, luego por año de lanzamiento
-      const sortedSets = setNums.sort((a, b) => {
-        const isFavA = inventory[a].isFavorite ? 1 : 0;
-        const isFavB = inventory[b].isFavorite ? 1 : 0;
-        if (isFavA !== isFavB) return isFavB - isFavA; // Favoritos primero
+        const results = await Promise.all(promises);
+        
+        return results
+            .filter(set => set !== null) 
+            .map(set => ({
+                ...set, 
+                ...inventory[set.set_num],
+                full_num_parts: set.num_parts,
+                isInCollection: true 
+            }));
+    }
 
-        // Luego por año
-        const yearA = setsDetailsCache[a] ? setsDetailsCache[a].year_released : 0;
-        const yearB = setsDetailsCache[b] ? setsDetailsCache[b].year_released : 0;
-        return yearB - yearA;
-      });
+    // 2. Filtra, ordena y renderiza los sets
+    function filterAndRender() {
+        const grid = document.getElementById('collectionGrid');
+        grid.innerHTML = '<div style="grid-column:1/-1">Aplicando filtros...</div>';
+        
+        const q = document.getElementById('search').value.toLowerCase().trim();
+        const sortKey = document.getElementById('sort').value;
+        const filterFav = document.getElementById('filter_fav').value;
+        const isDescending = sortKey.startsWith('-');
+        const actualSortKey = isDescending ? sortKey.substring(1) : sortKey;
+
+        // FILTRADO
+        let filteredSets = allSetsDetails.filter(set => {
+            const matchesSearch = set.name.toLowerCase().includes(q) || set.set_num.toLowerCase().includes(q);
+            const matchesFav = filterFav === 'all' || (filterFav === 'fav' && set.isFavorite);
+            return matchesSearch && matchesFav;
+        });
+
+        // ORDENAMIENTO
+        filteredSets.sort((a, b) => {
+            const valA = a[actualSortKey] || (actualSortKey === 'name' ? '' : -Infinity);
+            const valB = b[actualSortKey] || (actualSortKey === 'name' ? '' : -Infinity);
+            
+            if (actualSortKey === 'name') {
+                 const comparison = valA.localeCompare(valB);
+                 return isDescending ? -comparison : comparison;
+            }
+
+            if (valA < valB) return isDescending ? 1 : -1;
+            if (valA > valB) return isDescending ? -1 : 1;
+            return 0;
+        });
+
+        // RENDERIZADO
+        if(filteredSets.length === 0){
+            grid.innerHTML = `<div style="grid-column:1/-1;color:var(--muted)">No se encontraron sets en tu colección que coincidan con los filtros.</div>`;
+        } else {
+            renderCollectionGrid(filteredSets);
+        }
+        
+        updateStats(filteredSets);
+    }
+    
+    function updateStats(sets) {
+        // *** CAMBIO: Se cuenta el total de sets únicos ***
+        let uniqueSetsCount = sets.length;
+        let estimatedParts = sets.reduce((sum, set) => sum + (set.full_num_parts || 0), 0);
+        
+        document.getElementById('collectionStats').innerHTML = `
+            Mostrando ${uniqueSetsCount} sets únicos | Piezas estimadas: ${fmt(estimatedParts)}
+        `;
+    }
 
 
-      for(const setnum of sortedSets){
-        const item = inventory[setnum];
-        const qty = item.qty; 
-        totalSets += qty;
-        if (item.isFavorite) totalFavorites += 1;
-
-        try{
-          const detail = await getSetDetails(setnum);
-          const numParts = detail.num_parts || 0;
-          totalParts += numParts * qty;
-          
-          const el = document.createElement('article'); el.className='card';
-          
-          el.innerHTML = `
-            <button class="favorite-btn ${item.isFavorite ? 'active' : ''}" data-setnum="${setnum}">
-                <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18.275l-5.667 3.013.985-6.315-4.59-4.469 6.345-.921 2.83-5.748 2.83 5.748 6.345.921-4.59 4.469.985 6.315L10 18.275z" clip-rule="evenodd"></path></svg>
-            </button>
-            <div class='imgwrap'><img src='${detail.set_img_url||""}' alt='${escapeHtml(detail.name)}' style='max-width:100%;max-height:100%;object-fit:contain'/></div>
-            <h4 class='product-name'>${escapeHtml(detail.name)}</h4>
+    function renderCollectionGrid(sets) {
+        const grid = document.getElementById('collectionGrid');
+        grid.innerHTML = '';
+        
+        sets.forEach(set => {
+            const favIcon = set.isFavorite ? '★' : '☆'; 
+            const el = document.createElement('article'); el.className='card';
+            
+            el.innerHTML = `
+            <a href="detalles.html?set_num=${set.set_num}" style="text-decoration:none; color:inherit;">
+                <div class='imgwrap'>
+                    <img src='${set.set_img_url || ''}' alt='${escapeHtml(set.name)}' style='max-width:100%;max-height:100%;object-fit:contain;border-radius:10px'/>
+                </div>
+            </a>
+            <h4 class='product-name'>
+                 <a href="detalles.html?set_num=${set.set_num}" style="text-decoration:none; color:inherit;">${escapeHtml(set.name)}</a>
+            </h4>
             <p class='product-desc'>
-                ID Set: ${detail.set_num || '—'} 
-                <br>Sets Propios: ${qty} • Piezas: ${fmt(numParts)}
+                ID Set: ${set.set_num || '—'} 
+                <br>Año: ${set.year_released || '—'} • Piezas: ${fmt(set.full_num_parts) || '—'}
             </p>
-            <div class='action-row'>
-              <button class='tiny-btn remove-btn' data-setnum='${setnum}'>Quitar 1</button>
-              <a href="detalles.html?set_num=${setnum}" class='tiny-btn' style="text-decoration:none;">Ver Detalles</a>
+            <div class='price-row'>
+                <div class='collection-status' style='font-size: 14px; color:#10b981; font-weight:700;'>En Colección</div>
+                <div style='display:flex;gap:8px'>
+                    <button class='tiny-btn fav-btn' data-setnum='${set.set_num}' title="Marcar como Favorito">${favIcon}</button>
+                    <button class='tiny-btn remove-btn' data-setnum='${set.set_num}' style="background:#ef4444; color: white;" title="Quitar Set de Colección">Quitar</button>
+                    <a href="detalles.html?set_num=${set.set_num}" class='tiny-btn' style="text-decoration:none; color: var(--muted);">Detalles</a>
+                </div>
             </div>
-          `;
-          container.appendChild(el);
-        }catch(err){ console.error('Inventario item load',err); }
-      }
-      
-      document.getElementById('totalSetsCount').innerText = fmt(totalSets);
-      document.getElementById('totalPartsCount').innerText = fmt(totalParts);
-      document.getElementById('totalFavoritesCount').innerText = totalFavorites;
+            `;
+            grid.appendChild(el);
+        });
 
-
-      // Adjuntar eventos
-      document.querySelectorAll('.remove-btn').forEach(b=>b.addEventListener('click',()=>{ removeOneFromInventory(b.dataset.setnum); }));
-      document.querySelectorAll('.favorite-btn').forEach(b=>b.addEventListener('click',()=>{ toggleFavorite(b.dataset.setnum); }));
+        // Adjuntar eventos de botones
+        document.querySelectorAll('.remove-btn').forEach(b=>b.addEventListener('click',()=>{ removeSet(b.dataset.setnum); }));
+        document.querySelectorAll('.fav-btn').forEach(b=>b.addEventListener('click',()=>{ toggleFavorite(b.dataset.setnum); }));
     }
+
+    // UI wiring
+    document.getElementById('reload').addEventListener('click', filterAndRender);
+    document.getElementById('search-btn').addEventListener('click', filterAndRender);
+    document.getElementById('sort').addEventListener('change', filterAndRender);
+    document.getElementById('filter_fav').addEventListener('change', filterAndRender);
+    
+    // Enter en el campo de búsqueda
+    document.getElementById('search').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') { 
+        e.preventDefault(); 
+        filterAndRender();
+      }
+    });
 
     // Init
     (async function init(){ 
-        // Primero cargamos los detalles de todos los sets en el inventario para ordenar
-        const setNums = Object.keys(inventory);
-        for(const setnum of setNums){
-            try{
-                await getSetDetails(setnum);
-            } catch (e) { /* Ignorar errores de sets no encontrados */ }
+        inventory = JSON.parse(localStorage.getItem('legoInventory')) || {};
+        const grid = document.getElementById('collectionGrid');
+        if (Object.keys(inventory).length === 0) {
+            grid.innerHTML = '<div style="grid-column:1/-1;color:var(--muted); text-align: center; margin-top: 30px;">Tu colección está vacía. Ve al Catálogo para agregar sets.</div>';
+            document.getElementById('collectionStats').style.display = 'none';
+            document.querySelector('.controls').style.display = 'none';
+        } else {
+            grid.innerHTML = '<div style="grid-column:1/-1">Cargando detalles de tu colección desde la API...</div>';
+            allSetsDetails = await fetchCollectionDetails(); 
+            filterAndRender();
         }
-        renderCollection(); 
     })();
 
   </script>

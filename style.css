@@ -1,0 +1,585 @@
+/* =========================================================================
+   STYLE.CSS - Estilos Globales para BrickMaster (Index, Catálogo, Colección, Usuario, Detalles)
+   ========================================================================= */
+
+/* --- Variables y Reset --- */
+:root {
+    --bg: #0f1724;
+    --card: #0b1220;
+    --accent: #ffcc00; /* Amarillo/Dorado para acentos */
+    --muted: #94a3b8; /* Gris azulado para textos secundarios */
+    --primary-btn: linear-gradient(90deg, #0ea5e9, #7c3aed); /* Degradado Azul/Púrpura */
+    --glass: rgba(255, 255, 255, 0.04); /* Fondo para elementos transparentes/piezas */
+    --radius: 14px;
+    font-family: "Poppins", Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    background: linear-gradient(180deg, #071025 0%, #08142a 100%);
+    color: #e6eef8;
+    min-height: 100vh;
+    /* Espacio reservado para el sidebar fijo */
+    padding-left: 70px; 
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+  
+  /* --- SIDEBAR (Menú Lateral) --- */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 70px;
+    background: #050c18;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 100;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+  }
+  .sidebar a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--muted);
+    padding: 10px 0;
+    width: 100%;
+    transition: background 0.2s;
+  }
+  .sidebar a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+  }
+  .sidebar a svg {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 4px;
+  }
+  .sidebar a span {
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .sidebar a.active {
+    background: var(--primary-btn);
+    color: #fff;
+  }
+  
+  /* --- HEADER / Títulos --- */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 28px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+  .brand {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background: var(--primary-btn);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #081228;
+  }
+  .title {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  main {
+    padding: 18px 28px 80px;
+  }
+  
+  /* --- ELEMENTOS DE FORMULARIO/BOTONES GENERALES --- */
+  input[type="search"],
+  input[type="number"],
+  select,
+  textarea { 
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--card);
+    color: inherit;
+    margin-top: 4px;
+  }
+  .btn {
+    background: var(--accent);
+    color: #081228;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+  .btn:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .btn.ghost {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .tiny-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+  .tiny-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* --- DISEÑO GENERAL DE LAYOUT (GRID) --- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 18px;
+  }
+  .card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+    padding: 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    box-shadow: 0 6px 18px rgba(2, 6, 23, 0.6);
+  }
+  
+  /* --- ESTILOS DE LISTAS/CONTROLES (CATÁLOGO Y COLECCIÓN) --- */
+  .controls {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 12px;
+    border-radius: var(--radius);
+  }
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 100px;
+  }
+  .control-group label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .search {
+    flex: 1;
+    min-width: 250px;
+  }
+  .search-input-group {
+    display: flex;
+    gap: 8px;
+  } 
+  .theme-list {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .theme-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 8px 10px;
+    border-radius: 10px;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .theme-btn.active {
+    background: var(--primary-btn);
+    color: #fff;
+    border-color: transparent;
+  }
+  .imgwrap {
+    height: 170px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .product-name {
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+  .product-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  .price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .collection-status {
+    font-weight: 800;
+    color: #10b981;
+  }
+  .pager {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 14px;
+  }
+  .note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+  
+  /* =========================================================================
+     ESTILOS ESPECÍFICOS DE INDEX.HTML (CARRUSEL)
+     ========================================================================= */
+  .carousel {
+    position: relative;
+    width: 100%;
+    height: 90vh; /* Ajustado para mejor visualización */
+    overflow: hidden;
+  }
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.8s ease-in-out;
+    opacity: 0;
+  }
+  .slide.active {
+    opacity: 1;
+  }
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .slide-content {
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 10;
+    max-width: 80%;
+  }
+  .slide-content h1 {
+    font-size: 4em;
+    color: #fff;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  }
+  .slide-content p {
+    font-size: 1.5em;
+    color: var(--muted);
+    margin-bottom: 25px;
+  }
+  .slide-content .btn {
+    font-size: 18px;
+    padding: 12px 25px;
+  }
+  .nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    z-index: 20;
+    font-size: 20px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-btn.prev {
+    left: 20px;
+  }
+  .nav-btn.next {
+    right: 20px;
+  }
+  .indicators {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    display: flex;
+    gap: 10px;
+  }
+  .dot {
+    height: 10px;
+    width: 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .dot.active {
+    background-color: var(--accent);
+  }
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    padding: 40px 0;
+  }
+  .feature {
+    background: var(--card);
+    padding: 25px;
+    border-radius: var(--radius);
+    text-align: center;
+  }
+  .feature h3 {
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .about {
+      padding: 20px 0;
+      text-align: center;
+  }
+  .about h2 {
+      color: #fff;
+      margin-bottom: 15px;
+  }
+  footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: auto;
+      color: var(--muted);
+      font-size: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  /* =========================================================================
+     ESTILOS ESPECÍFICOS DE DETALLES.HTML
+     ========================================================================= */
+  .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 15px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .detail-container {
+      display: flex;
+      gap: 30px;
+      margin-top: 20px;
+  }
+  .set-image-col {
+      /* Estilos extraídos de detalles.html */
+      flex: 0 0 350px; 
+      text-align: center;
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+  .set-image-col img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px; 
+  }
+  .set-details-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+  }
+  .stat-box-grid {
+      /* Estilos extraídos de detalles.html */
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+  }
+  .stat-box {
+      /* Estilos extraídos de detalles.html */
+      background: var(--card);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .stat-box .value {
+      /* Estilos extraídos de detalles.html */
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 4px;
+  }
+  .stat-box .label {
+      /* Estilos extraídos de detalles.html */
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+  }
+  
+  /* Estilos para el inventario de piezas (en detalles.html) */
+  .parts-list {
+      max-height: 500px;
+      overflow-y: auto;
+      padding-right: 10px;
+      background: var(--card);
+      border-radius: 10px;
+      padding: 10px;
+  }
+  .parts-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  }
+  .parts-item:last-child {
+      border-bottom: none;
+  }
+  .part-img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      margin-right: 15px;
+      border-radius: 4px;
+      background: var(--glass);
+  }
+  .part-details {
+      flex: 1;
+      font-size: 14px;
+  }
+  .part-details .name {
+      font-weight: 600;
+  }
+  .part-details .info {
+      font-size: 12px;
+      color: var(--muted);
+  }
+  .part-qty {
+      font-weight: 700;
+      color: var(--accent);
+  }
+  
+  /* Media Query para Detalles (móvil) */
+  @media (max-width: 800px) { 
+      .detail-container { flex-direction: column; } 
+      .set-image-col { flex: 0 0 auto; } 
+  }
+  
+  /* =========================================================================
+     ESTILOS ESPECÍFICOS DE USUARIO.HTML
+     ========================================================================= */
+  .profile-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: var(--card);
+      border-radius: var(--radius);
+  }
+  .profile-header {
+      text-align: center;
+      margin-bottom: 30px;
+  }
+  .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+      border: 3px solid var(--accent);
+  }
+  .profile-header h1 {
+      color: #fff;
+      font-size: 28px;
+      margin-bottom: 5px;
+  }
+  .profile-header p {
+      color: var(--muted);
+  }
+  .profile-section {
+      margin-bottom: 25px;
+  }
+  .profile-section label {
+      display: block;
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 2px;
+      margin-top: 10px;
+  }
+  .profile-section .value {
+      font-size: 16px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: block;
+  }
+  .profile-stats {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      margin-top: 20px;
+      padding: 15px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .profile-stats div {
+      flex: 1;
+  }
+  .profile-stats .count {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent);
+  }
+  .profile-stats .label {
+      font-size: 12px;
+      color: var(--muted);
+  }

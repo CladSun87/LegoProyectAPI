@@ -3,197 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BrickMaster — Colección LEGO</title>
+  <title>Inicio — BrickMaster</title>
+  <link rel="stylesheet" href="style.css"> 
   <style>
-    :root {
-      --bg: #0f1724;
-      --card:#0b1220;
-      --accent: #ffcc00;
-      --muted: #94a3b8;
-      --primary-btn:linear-gradient(90deg,#0ea5e9,#7c3aed);
-      --radius: 14px;
-      font-family: "Poppins", Inter, sans-serif;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: linear-gradient(180deg, #081428, #0a1a33);
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-      padding-left: 70px; /* Espacio para el sidebar */
-    }
-    /* --- SIDEBAR --- */
-    .sidebar{position:fixed;top:0;left:0;height:100%;width:70px;background:rgba(5, 12, 24, 0.95);padding:10px 0;display:flex;flex-direction:column;align-items:center;z-index:100;box-shadow:2px 0 10px rgba(0,0,0,0.5);}
-    .sidebar a{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--muted);padding:10px 0;width:100%;transition:background .2s;}
-    .sidebar a:hover{background:rgba(255,255,255,0.05);color:#fff;}
-    .sidebar a svg{width:24px;height:24px;margin-bottom:4px;}
-    .sidebar a span{font-size:10px;font-weight:600;}
-    .sidebar a.active{background:var(--primary-btn);color:#fff;}
-    /* --- HEADER --- */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 28px; /* Ajuste para el sidebar */
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .main-title {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--accent);
-    }
-    nav { display: none; } /* Ocultar nav original para usar sidebar */
-
-    /* Carrusel */
-    .carousel {
-      position: relative;
-      width: 100%;
-      height: 90vh;
-      overflow: hidden;
-    }
-    .slide {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0; left: 0;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      /* Estilo para que las imágenes random se vean bien */
-      filter: saturate(1.1) brightness(0.9);
-    }
-    .slide.active { opacity: 1; z-index: 1; }
-    .overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.55);
-    }
-    .slide-content {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      max-width: 700px;
-      padding: 20px;
-      background: rgba(8, 12, 19, 0.7);
-      border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .slide-content h1 {
-      font-size: 48px;
-      color: var(--accent);
-      margin-bottom: 20px;
-      text-shadow: 0 0 10px rgba(0,0,0,0.8);
-    }
-    .slide-content p {
-      font-size: 18px;
-      margin-bottom: 30px;
-      color: #ccc;
-    }
-    .btn {
-      padding: 14px 28px;
-      background: var(--primary-btn);
-      color: #fff;
-      border-radius: 8px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: opacity 0.3s ease;
-      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.5);
-    }
-    .btn:hover { opacity: 0.9; }
-
-    /* Botones navegación */
-    .nav-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0,0,0,0.6);
-      color: var(--accent);
-      border: none;
-      font-size: 32px;
-      padding: 10px 18px;
-      cursor: pointer;
-      z-index: 3;
-      border-radius: 50%;
-      transition: background 0.3s ease;
-    }
-    .nav-btn:hover { background: rgba(0,0,0,0.8); }
-    .prev { left: 20px; }
-    .next { right: 20px; }
-
-    /* Indicadores */
-    .indicators {
-      position: absolute;
-      bottom: 25px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
-      z-index: 3;
-    }
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.5);
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .dot.active { background: var(--accent); }
-
-    /* Secciones inferiores (Mantienen estilos) */
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 24px;
-      padding: 60px 40px;
-      background: rgba(255,255,255,0.05);
-    }
-    .feature {
-      background: rgba(255,255,255,0.05);
-      border-radius: var(--radius);
-      padding: 20px;
-      text-align: center;
-    }
-    .feature h3 { color: var(--accent); margin-bottom: 10px; }
-
-    .about {
-      padding: 60px 40px;
-      text-align: center;
-      background: linear-gradient(180deg, #0a1a33, #0f1724);
-    }
-    .about h2 {
-      color: var(--accent);
-      margin-bottom: 20px;
-      font-size: 32px;
-    }
-    .about p {
-      max-width: 700px;
-      margin: 0 auto;
-      font-size: 18px;
-      color: var(--muted);
-    }
-
-    footer {
-      padding: 20px 40px;
-      background: rgba(255,255,255,0.05);
-      text-align: center;
-      color: var(--muted);
-      font-size: 14px;
-    }
+    /* Estilos mínimos para el carrusel y que el sidebar funcione */
+    body { padding-left: 70px; }
+    .carousel { height: 90vh; }
   </style>
 </head>
 <body>
-
   <div class="sidebar">
     <a href="index.html" class="active">
         <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
@@ -214,34 +32,40 @@
   </div>
 
   <header>
-    <div class="main-title">BrickMaster</div>
-    </header>
+    <div class="brand">
+        <div class="logo">HOME</div>
+        <div>
+            <div class="title">BrickMaster</div>
+            <div class="subtitle">Tu gestor de colección LEGO.</div>
+        </div>
+    </div>
+  </header>
 
   <section class="carousel" id="inicio">
-    <div class="slide active">
+    <div class="slide active" style="background-image:url('https://www.lego.com/cdn/cs/set/assets/bltefcbdf317c34e8b3/lego-starwars-hero.jpg');">
       <div class="overlay"></div>
       <div class="slide-content">
-        <h1>...</h1>
-        <p>...</p>
-        <a href="catalogo.html" class="btn">...</a>
+        <h1>LEGO Star Wars</h1>
+        <p>Construye tu galaxia, revive batallas y usa la Fuerza.</p>
+        <a href="catalogo.html" class="btn">Ver Sets</a>
       </div>
     </div>
 
-    <div class="slide">
+    <div class="slide" style="background-image:url('https://www.lego.com/cdn/cs/set/assets/blt8d3f43e8e03e4c4a/lego-technic-banner.jpg');">
       <div class="overlay"></div>
       <div class="slide-content">
-        <h1>...</h1>
-        <p>...</p>
-        <a href="catalogo.html" class="btn">...</a>
+        <h1>LEGO Technic</h1>
+        <p>Descubre la ingeniería y realismo en cada modelo.</p>
+        <a href="catalogo.html" class="btn">Explorar</a>
       </div>
     </div>
 
-    <div class="slide">
+    <div class="slide" style="background-image:url('https://www.lego.com/cdn/cs/set/assets/blt508f68c8a8c0e1cc/lego-marvel-banner.jpg');">
       <div class="overlay"></div>
       <div class="slide-content">
-        <h1>...</h1>
-        <p>...</p>
-        <a href="catalogo.html" class="btn">...</a>
+        <h1>LEGO Marvel</h1>
+        <p>Únete a los héroes más poderosos en épicas construcciones.</p>
+        <a href="catalogo.html" class="btn">Descubrir</a>
       </div>
     </div>
 
@@ -255,128 +79,63 @@
     </div>
   </section>
 
-  <section class="features">
-    <div class="feature">
-      <h3>Sets Exclusivos</h3>
-      <p>Encuentra colecciones únicas y ediciones limitadas de tus temas favoritos.</p>
-    </div>
-    <div class="feature">
-      <h3>Diseña y Crea</h3>
-      <p>Imagina, construye y comparte tus propias creaciones con otros fans.</p>
-    </div>
-    <div class="feature">
-      <h3>Colección Digital</h3>
-      <p>Lleva un registro de todos tus sets y las piezas que posees de forma digital.</p>
-    </div>
-  </section>
+  <main>
+    <section class="features">
+      <div class="feature">
+        <h3>Catálogo Completo</h3>
+        <p>Explora miles de sets actualizados de la API de Rebrickable.</p>
+      </div>
+      <div class="feature">
+        <h3>Gestión de Colección</h3>
+        <p>Controla qué sets tienes, cuáles son tus favoritos y cuántas piezas posees.</p>
+      </div>
+      <div class="feature">
+        <h3>Totalmente Personalizado</h3>
+        <p>Una herramienta diseñada por y para coleccionistas, sin distracciones de tienda.</p>
+      </div>
+    </section>
 
-  <section class="about" id="nosotros">
-    <h2>Sobre Nosotros</h2>
-    <p>Somos fanáticos del mundo LEGO. Nuestro objetivo es inspirar creatividad, diversión y aprendizaje a través de cada bloque. Construye tu historia con nosotros y forma parte de una comunidad global de creadores.</p>
-  </section>
+    <section class="about" id="nosotros">
+      <h2>Sobre BrickMaster</h2>
+      <p>Somos una herramienta simple para coleccionistas que buscan organizar su inventario de sets LEGO de manera eficiente y visual. Usamos la data pública de Rebrickable para mantener tu colección al día.</p>
+    </section>
+  </main>
 
   <footer>
-    © 2025 BrickMaster | Todos los derechos reservados.
+    © 2025 BrickMaster | Data por Rebrickable.
   </footer>
 
   <script>
-    const API_KEY = '1e6240a0d3dc2d161d3463cf24e830a8';
-    const BASE = 'https://rebrickable.com/api/v3/lego';
-    
-    // Contenido estático del carrusel (textos de presentación)
-    const SLIDE_CONTENT = [
-        {title: "Tu Colección Perfecta", p: "Agrega, gestiona y marca tus sets favoritos. El inventario definitivo para tu pasión LEGO.", linkText: "Ver Catálogo"},
-        {title: "Descubre el Universo LEGO", p: "Explora miles de sets, filtra por tema, piezas y año de lanzamiento. ¡Encuentra tu próximo set!", linkText: "Ir al Catálogo"},
-        {title: "Comunidad y Creación", p: "Diseña, construye y comparte tus propias creaciones. Únete a una comunidad global de constructores.", linkText: "Ir al Catálogo"},
-    ];
+    const slides = document.querySelectorAll(".slide");
+    const dots = document.querySelectorAll(".dot");
+    let index = 0;
+    const total = slides.length;
 
-    /**
-     * @brief Fetches random set images from Rebrickable API.
-     * @returns {Promise<string[]>} Array of image URLs.
-     */
-    async function fetchRandomSetImages() {
-        try {
-            // Se piden 30 sets recientes o populares para tener variedad de imágenes
-            const res = await fetch(BASE + `/sets/?page_size=30&ordering=-year_released`, {
-                headers: {'Authorization': `key ${API_KEY}`}
-            });
-            if (!res.ok) throw new Error('API error: ' + res.status);
-            const data = await res.json();
-            
-            // Filtra los sets que sí tienen imagen y escoge 3 índices aleatorios
-            const setsWithImages = data.results.filter(s => s.set_img_url);
-            const randomIndices = [];
-            while (randomIndices.length < 3) {
-                const randIndex = Math.floor(Math.random() * setsWithImages.length);
-                if (!randomIndices.includes(randIndex) && setsWithImages[randIndex]) {
-                    randomIndices.push(randIndex);
-                }
-            }
-            
-            return randomIndices.map(i => setsWithImages[i].set_img_url);
+    const showSlide = (i) => {
+      slides.forEach(s => s.classList.remove("active"));
+      dots.forEach(d => d.classList.remove("active"));
+      slides[i].classList.add("active");
+      dots[i].classList.add("active");
+      index = i;
+    };
 
-        } catch (error) {
-            console.error("Error fetching random images:", error);
-            // Imágenes de respaldo en caso de fallo de la API
-            return [
-                'https://www.lego.com/cdn/cs/set/assets/bltefcbdf317c34e8b3/lego-starwars-hero.jpg',
-                'https://www.lego.com/cdn/cs/set/assets/blt8d3f43e8e03e4c4a/lego-technic-banner.jpg',
-                'https://www.lego.com/cdn/cs/set/assets/blt508f68c8a8c0e1cc/lego-marvel-banner.jpg'
-            ];
-        }
-    }
+    document.querySelector(".next").addEventListener("click", () => {
+      index = (index + 1) % total;
+      showSlide(index);
+    });
+    document.querySelector(".prev").addEventListener("click", () => {
+      index = (index - 1 + total) % total;
+      showSlide(index);
+    });
+    dots.forEach((dot, i) => {
+      dot.addEventListener("click", () => showSlide(i));
+    });
 
-    async function initCarousel() {
-        const images = await fetchRandomSetImages();
-        const slides = document.querySelectorAll(".slide");
-        
-        // Asignar contenido e imagen a cada slide
-        slides.forEach((slide, i) => {
-            const imgUrl = images[i % images.length]; // Asegura que no falte imagen
-            slide.style.backgroundImage = `url('${imgUrl}')`;
-            
-            const content = SLIDE_CONTENT[i % SLIDE_CONTENT.length];
-            slide.querySelector('h1').innerText = content.title;
-            slide.querySelector('p').innerText = content.p;
-            slide.querySelector('.btn').innerText = content.linkText;
-        });
-        
-        // Lógica de funcionamiento del carrusel
-        const dots = document.querySelectorAll(".dot");
-        let index = 0;
-        const total = slides.length;
-
-        const showSlide = (i) => {
-            slides.forEach(s => s.classList.remove("active"));
-            dots.forEach(d => d.classList.remove("active"));
-            slides[i].classList.add("active");
-            dots[i].classList.add("active");
-            index = i;
-        };
-
-        document.querySelector(".next").addEventListener("click", () => {
-            index = (index + 1) % total;
-            showSlide(index);
-        });
-        document.querySelector(".prev").addEventListener("click", () => {
-            index = (index - 1 + total) % total;
-            showSlide(index);
-        });
-        dots.forEach((dot, i) => {
-            dot.addEventListener("click", () => showSlide(i));
-        });
-
-        // Carrusel automático
-        setInterval(() => {
-            index = (index + 1) % total;
-            showSlide(index);
-        }, 6000);
-        
-        // Mostrar el primer slide al iniciar
-        showSlide(0);
-    }
-
-    document.addEventListener('DOMContentLoaded', initCarousel);
+    // Automático
+    setInterval(() => {
+      index = (index + 1) % total;
+      showSlide(index);
+    }, 6000);
   </script>
 </body>
 </html>
